@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)https://eldred.fr/gb-asm-tutorial/part1/bin_and_hex.html -->
+<html lang="en" class="js sidebar-visible light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Book generated using mdBook -->
+        
+        <title>Binary and hexadecimal - GB ASM Tutorial</title>
+
+
+        <!-- Custom HTML head -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site:id" content="@issotm">
+        <meta property="og:title" content="Binary and hexadecimal - GB ASM Tutorial">
+        <meta property="og:image" content="https://eldred.fr/gb-asm-tutorial/assets/banner/1200x628.png">
+        <meta property="og:site_name" content="GB ASM Tutorial">
+
+        
+        <meta name="description" content="A complete guide to programming Game Boy games in assembly.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="rgba(0, 0, 0, 0)">
+
+        <link rel="icon" href="https://eldred.fr/gb-asm-tutorial/favicon.svg">
+        <link rel="shortcut icon" href="https://eldred.fr/gb-asm-tutorial/favicon.png">
+        <link rel="stylesheet" href="./bit_files/variables.css">
+        <link rel="stylesheet" href="./bit_files/general.css">
+        <link rel="stylesheet" href="./bit_files/chrome.css">
+        <link rel="stylesheet" href="./bit_files/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="./bit_files/font-awesome.css">
+        <link rel="stylesheet" href="./bit_files/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="./bit_files/highlight.css">
+        <link rel="stylesheet" href="./bit_files/tomorrow-night.css" disabled="">
+        <link rel="stylesheet" href="./bit_files/ayu-highlight.css" disabled="">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./bit_files/custom.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents" aria-hidden="false">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/index.html" tabindex="0" data-dl-uid="0" data-dl-original="true" data-dl-translated="true">ホーム</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/roadmap.html" tabindex="0" data-dl-uid="1" data-dl-original="true" data-dl-translated="true">ロードマップ</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/help-feedback.html" tabindex="0" data-dl-uid="2" data-dl-original="true" data-dl-translated="true">ヘルプとフィードバック</a></li><li class="chapter-item affix "></li><li class="part-title" data-dl-uid="3" data-dl-original="true" data-dl-translated="true">Part.I - Hello World!</li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/setup.html" tabindex="0" data-dl-uid="4" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="5" data-dl-original="true" data-dl-translated="true">1.</strong>セットアップ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/hello_world.html" tabindex="0" data-dl-uid="6" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="7" data-dl-original="true" data-dl-translated="true">2.</strong>Hello World!</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/toolchain.html" tabindex="0" data-dl-uid="8" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="9" data-dl-original="true" data-dl-translated="true">3.</strong>ツールチェイン</a></li><li class="chapter-item expanded "><a href="https://eldred.fr/gb-asm-tutorial/part1/bin_and_hex.html" class="active" tabindex="0" data-dl-uid="10" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="11" data-dl-original="true" data-dl-translated="true">4.</strong>2進数、16進数</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/registers.html" tabindex="0" data-dl-uid="12" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="13" data-dl-original="true" data-dl-translated="true">5.</strong>レジスター</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/assembly.html" tabindex="0" data-dl-uid="14" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="15" data-dl-original="true" data-dl-translated="true">6.</strong>組立の基本</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/memory.html" tabindex="0" data-dl-uid="16" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="17" data-dl-original="true" data-dl-translated="true">7.</strong>メモリ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/header.html" tabindex="0" data-dl-uid="18" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="19" data-dl-original="true" data-dl-translated="true">8.</strong>ヘッダー</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/operations.html" tabindex="0" data-dl-uid="20" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="21" data-dl-original="true" data-dl-translated="true">9.</strong>オペレーション＆フラッグ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/jumps.html" tabindex="0" data-dl-uid="22" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="23" data-dl-original="true" data-dl-translated="true">10.</strong>ジャンプ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/tracing.html" tabindex="0" data-dl-uid="24" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="25" data-dl-original="true" data-dl-translated="true">11.</strong>トレース</a></li><li class="chapter-item "><div data-dl-uid="26" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="27" data-dl-original="true" data-dl-translated="true">12.</strong>グラフィックス</div><a class="toggle" tabindex="0"><div data-dl-uid="28" data-dl-original="true" data-dl-translated="true">❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/tiles.html" tabindex="0"><strong aria-hidden="true">12.1.</strong> Tiles</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/palettes.html" tabindex="0"><strong aria-hidden="true">12.2.</strong> Palettes</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/tilemap.html" tabindex="0"><strong aria-hidden="true">12.3.</strong> Tilemap</a></li></ol></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/wrapup.html" tabindex="0" data-dl-uid="29" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="30" data-dl-original="true" data-dl-translated="true">13.</strong>まとめ</a></li><li class="chapter-item affix "></li><li class="part-title" data-dl-uid="31" data-dl-original="true" data-dl-translated="true">Part II - 初めてのゲーム</li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/getting-started.html" tabindex="0" data-dl-uid="32" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="33" data-dl-original="true" data-dl-translated="true">14.</strong>はじめに</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/objects.html" tabindex="0" data-dl-uid="34" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="35" data-dl-original="true" data-dl-translated="true">15.</strong>対象物</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/functions.html" tabindex="0" data-dl-uid="36" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="37" data-dl-original="true" data-dl-translated="true">16.</strong>機能一覧</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/input.html" tabindex="0" data-dl-uid="38" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="39" data-dl-original="true" data-dl-translated="true">17.</strong>入力</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/wip.html" tabindex="0" data-dl-uid="40" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="41" data-dl-original="true" data-dl-translated="true">18.</strong>進行中の仕事</a></li><li class="chapter-item affix "></li><li class="part-title" data-dl-uid="42" data-dl-original="true" data-dl-translated="true">第Ⅲ部 第2試合</li><li class="chapter-item "><div data-dl-uid="43" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="44" data-dl-original="true" data-dl-translated="true">19.</strong>To be written...</div></li><li class="spacer"></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/next.html" tabindex="0" data-dl-uid="45" data-dl-original="true" data-dl-translated="true">次に進むべき道</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/resources.html" tabindex="0" data-dl-uid="46" data-dl-original="true" data-dl-translated="true">リソース</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/thanks.html" tabindex="0" data-dl-uid="47" data-dl-original="true" data-dl-translated="true">感謝</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar" style="top: 0px;">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar" aria-expanded="true">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title" data-dl-uid="48" data-dl-original="true" data-dl-translated="true">GB ASMチュートリアル</h1>
+
+                    <div class="right-buttons">
+                        <a href="https://eldred.fr/gb-asm-tutorial/print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/ISSOtm/gb-asm-tutorial" title="Git repository" aria-label="Git repository" target="_blank">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/ISSOtm/gb-asm-tutorial/edit/master/src/part1/bin_and_hex.md" title="Suggest an edit" aria-label="Suggest an edit" target="_blank">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="binary-and-hexadecimal" data-dl-uid="49" data-dl-original="true" data-dl-translated="true"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/bin_and_hex.html#binary-and-hexadecimal" data-dl-uid="50" data-dl-original="true" data-dl-translated="true">2進数、16進数</a></h1>
+<p data-dl-uid="51" data-dl-original="true" data-dl-translated="true">コードの話をする前に、少し予備知識を入れておきましょう。 低レベルでプログラミングする場合、<em data-dl-uid="52" data-dl-original="true" data-dl-translated="true"><a href="https://en.wikipedia.org/wiki/Binary_number" target="_blank" data-dl-uid="53" data-dl-original="true" data-dl-translated="true">2進数と</a></em> <em data-dl-uid="54" data-dl-original="true" data-dl-translated="true"><a href="https://en.wikipedia.org/wiki/Hexadecimal" target="_blank" data-dl-uid="55" data-dl-original="true" data-dl-translated="true">16進数の</a></em>理解は必須です。 この2つについては既にご存知かもしれませんが、RGBDS固有の情報をこのレッスンの最後にまとめています。</p>
+<p data-dl-uid="56" data-dl-original="true" data-dl-translated="true">2進数とは何かというと、いわゆる「<em data-dl-uid="57" data-dl-original="true" data-dl-translated="true">2</em> <a href="https://en.wikipedia.org/wiki/Decimal" target="_blank" data-dl-uid="58" data-dl-original="true" data-dl-translated="true">進</a>法」と呼ばれる数字の表し方です。0、1、2、3、4、5、6、7、8、9の10桁で、桁は次のようになります。</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs" data-dl-uid="59" data-dl-original="true" data-dl-translated="true">  42 = 4 × 10 + 2 = 4 × 10^1 + 2 × 10^0 ↑ ↑ この10は、私たちが10進数で数えることから来ています！ 1024 = 1 × 1000 + 0 × 100 + 2 × 10 + 4 = 1 × 10^3 + 0 × 10^2 + 2 × 10^1 + 4 × 10^0 ↑ ↑ そしてここで、数を構成する桁を見てみましょう！ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ☆☆☆☆☆。</code></pre>
+<div class="box tip decorated">
+<div><p data-dl-uid="60" data-dl-original="true" data-dl-translated="true">ℹ️</p></div>
+<div>
+<p data-dl-uid="61" data-dl-original="true" data-dl-translated="true">ここで<code class="hljs" data-dl-uid="62" data-dl-original="true" data-dl-translated="true">^</code>は「～のべき乗」を意味し、<code class="hljs" data-dl-uid="63" data-dl-original="true" data-dl-translated="true">X^N</code>は<code class="hljs" data-dl-uid="64" data-dl-original="true" data-dl-translated="true">X</code>にそれ自身を<code class="hljs" data-dl-uid="65" data-dl-original="true" data-dl-translated="true">N</code>回掛けることに等しく、<code class="hljs" data-dl-uid="66" data-dl-original="true" data-dl-translated="true">X ^ 0 = 1</code> となる。</p>
+</div>
+</div>
+<p data-dl-uid="67" data-dl-original="true" data-dl-translated="true">10進数は10の累乗というユニークな<em data-dl-uid="68" data-dl-original="true" data-dl-translated="true">分解が</em>可能です（<em data-dl-uid="69" data-dl-original="true" data-dl-translated="true">10進数は</em>10の底ですからね）。 しかし、なぜ10の累乗なのかというと、2進数など他の底を使うことができるからです（なぜ2進数なのかは後述します）。</p>
+<p data-dl-uid="70" data-dl-original="true" data-dl-translated="true">2進法は2を基本としているので、<em data-dl-uid="71" data-dl-original="true" data-dl-translated="true">ビットと</em>呼ばれる桁は2つしかない。従って、上記の原理を一般化して、この2つの数字を同じように書くことができる。</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs" data-dl-uid="72" data-dl-original="true" data-dl-translated="true">  42 = 1 × 32 + 0 × 16 + 1 × 8 + 0 × 4 + 1 × 2 + 0 = 1 × 2^5 + 0 × 2^4 + 1 × 2^3 + 0 × 2^2 + 1 × 2^1 + 0 × 2^0 ↑ ↑ ↑ そして今は2の底で数えているので、10ではなく2が表示されています。
+
+1024 = 1 × 1024 + 0 × 512 + 0 × 256 + 0 × 128 + 0 × 64 + 0 × 32 + 0 × 16 + 0 × 8 + 0 × 4 + 0 × 2 + 0 = 1 × 2^10 + 0 × 2^9 + 0 × 2^8 + 0 × 2^7 + 0 × 2^6 + 0 ×</code></pre>
+<p data-dl-uid="73" data-dl-original="true" data-dl-translated="true">つまり、同じ原理で、2進数では42は<code class="hljs" data-dl-uid="74" data-dl-original="true" data-dl-translated="true">101010</code>、1024は<code class="hljs" data-dl-uid="75" data-dl-original="true" data-dl-translated="true">100000000と</code>書くことができます。 
+10（10進数の10）と2（2進数の10）は区別がつかないので、RGBDSアセンブリでは2進数の前にパーセント記号を付け、10は10、%10は2としています。</p>
+<p data-dl-uid="76" data-dl-original="true" data-dl-translated="true">しかし、なぜ2進数なのでしょうか。 ビットは0か1しかなく、「ON」「OFF」、「空」「満」など、簡単に表現できるからです。 もし、家庭で1ビットメモリを作りたいなら、箱を取ってください。 空なら0、<em data-dl-uid="77" data-dl-original="true" data-dl-translated="true">何か入って</em>いれば1が格納されます。このように、コンピュータは主に2進数を操作しますが、このチュートリアル全体を通じて、<em data-dl-uid="78" data-dl-original="true" data-dl-translated="true">多くの</em>意味を持っていることがわかると思います。</p>
+<h2 id="hexadecimal" data-dl-uid="79" data-dl-original="true" data-dl-translated="true"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/bin_and_hex.html#hexadecimal" data-dl-uid="80" data-dl-original="true" data-dl-translated="true">十六進法</a></h2>
+<p data-dl-uid="81" data-dl-original="true" data-dl-translated="true">要約すると、10進数はコンピュータにとって実用的ではなく、代わりに2進数（ベース2）に頼っています。 さて、しかし2進数は本当に実用的ではありません。例えば%10000000000、別名2048。10進数では4桁で済むところ、2進数は12桁必要です！そして、実はゼロを1つ多く書きすぎたことに気づきましたか？ 幸い、16進数がこの日を救ってくれるでしょう。🦸</p>
+<p>Base 16 works just the same as every other base, but with 16 digits, called <em>nibbles</em>: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, and F.</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">  42 =            2 × 16   + 10
+     =            2 × 16^1 + A × 16^0
+
+1024 = 4 × 256  + 0 × 16   + 0
+     = 4 × 16^2 + 0 × 16^1 + 0 × 16^0
+</code></pre>
+<p>Like binary, we will use a prefix to denote hexadecimal, namely <code class="hljs">$</code>.
+So, 42 = $2A, and 1024 = $400.
+This is <em>much</em> more compact than binary, and slightly more than decimal, too; but what makes hexadecimal very interesting is that one nibble corresponds <em>exactly</em> to 4 bits!</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Nibble</th><th style="text-align: center">Bits</th></tr></thead><tbody>
+<tr><td style="text-align: center">$0</td><td style="text-align: center">%0000</td></tr>
+<tr><td style="text-align: center">$1</td><td style="text-align: center">%0001</td></tr>
+<tr><td style="text-align: center">$2</td><td style="text-align: center">%0010</td></tr>
+<tr><td style="text-align: center">$3</td><td style="text-align: center">%0011</td></tr>
+<tr><td style="text-align: center">$4</td><td style="text-align: center">%0100</td></tr>
+<tr><td style="text-align: center">$5</td><td style="text-align: center">%0101</td></tr>
+<tr><td style="text-align: center">$6</td><td style="text-align: center">%0110</td></tr>
+<tr><td style="text-align: center">$7</td><td style="text-align: center">%0111</td></tr>
+<tr><td style="text-align: center">$8</td><td style="text-align: center">%1000</td></tr>
+<tr><td style="text-align: center">$9</td><td style="text-align: center">%1001</td></tr>
+<tr><td style="text-align: center">$A</td><td style="text-align: center">%1010</td></tr>
+<tr><td style="text-align: center">$B</td><td style="text-align: center">%1011</td></tr>
+<tr><td style="text-align: center">$C</td><td style="text-align: center">%1100</td></tr>
+<tr><td style="text-align: center">$D</td><td style="text-align: center">%1101</td></tr>
+<tr><td style="text-align: center">$E</td><td style="text-align: center">%1110</td></tr>
+<tr><td style="text-align: center">$F</td><td style="text-align: center">%1111</td></tr>
+</tbody></table>
+</div>
+<p>This makes it very easy to convert between binary and hexadecimal, while retaining a compact enough notation.
+Thus, hexadecimal is used a lot more than binary.
+And, don’t worry, decimal can still be used 😜</p>
+<p>(Side note: one could point that octal, i.e. base 8, would also work for this; however, we will primarily deal with units of 8 bits, for which hexadecimal works much better than octal. RGBDS supports octal via the <code class="hljs">&amp;</code> prefix, but I have yet to see it used.)</p>
+<div class="box tip decorated">
+<div><p>💡</p></div>
+<div>
+<p>If you’re having trouble converting between decimal and binary/hexadecimal, check if your favorite calculator program doesn’t have a “programmer” mode, or a way to convert between bases.</p>
+</div>
+</div>
+<h2 id="summary"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/bin_and_hex.html#summary">Summary</a></h2>
+<ul>
+<li>In RGBDS assembly, the hexadecimal prefix is <code class="hljs">$</code>, and the binary prefix is <code class="hljs">%</code>.</li>
+<li>Hexadecimal can be used as a “compact binary” notation.</li>
+<li>Using binary or hexadecimal is useful when individual bits matter; otherwise, decimal works just as well.</li>
+<li>For when numbers get a bit too long, RGBASM allows underscores between digits (<code class="hljs">123_465</code>, <code class="hljs">%10_1010</code>, <code class="hljs">$DE_AD_BE_EF</code>, etc.)</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="https://eldred.fr/gb-asm-tutorial/part1/toolchain.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="https://eldred.fr/gb-asm-tutorial/part1/registers.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="https://eldred.fr/gb-asm-tutorial/part1/toolchain.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="https://eldred.fr/gb-asm-tutorial/part1/registers.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="./bit_files/elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./bit_files/mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./bit_files/searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="./bit_files/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./bit_files/highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./bit_files/book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="./bit_files/linenos.js"></script>
+
+
+    
+
+<img id="sddsExtensionInfoImg" style="display: none; position: absolute; top: 0px; left: 0px; width: 32px; height: 32px; z-index: 2147483647;"><img id="sddsExtensionArrowImg" style="display: none; position: absolute; top: 0px; left: 0px; width: 32px; height: 32px; z-index: 2147483647;"></body></html>

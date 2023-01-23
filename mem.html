@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://eldred.fr/gb-asm-tutorial/part1/memory.html -->
+<html lang="en" class="js sidebar-visible light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Book generated using mdBook -->
+        
+        <title>Memory - GB ASM Tutorial</title>
+
+
+        <!-- Custom HTML head -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site:id" content="@issotm">
+        <meta property="og:title" content="Memory - GB ASM Tutorial">
+        <meta property="og:image" content="https://eldred.fr/gb-asm-tutorial/assets/banner/1200x628.png">
+        <meta property="og:site_name" content="GB ASM Tutorial">
+
+        
+        <meta name="description" content="A complete guide to programming Game Boy games in assembly.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="rgba(0, 0, 0, 0)">
+
+        <link rel="icon" href="https://eldred.fr/gb-asm-tutorial/favicon.svg">
+        <link rel="shortcut icon" href="https://eldred.fr/gb-asm-tutorial/favicon.png">
+        <link rel="stylesheet" href="./mem_files/variables.css">
+        <link rel="stylesheet" href="./mem_files/general.css">
+        <link rel="stylesheet" href="./mem_files/chrome.css">
+        <link rel="stylesheet" href="./mem_files/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="./mem_files/font-awesome.css">
+        <link rel="stylesheet" href="./mem_files/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="./mem_files/highlight.css">
+        <link rel="stylesheet" href="./mem_files/tomorrow-night.css" disabled="">
+        <link rel="stylesheet" href="./mem_files/ayu-highlight.css" disabled="">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mem_files/custom.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents" aria-hidden="false">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/index.html" tabindex="0" data-dl-uid="0" data-dl-original="true" data-dl-translated="true">ホーム</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/roadmap.html" tabindex="0" data-dl-uid="1" data-dl-original="true" data-dl-translated="true">ロードマップ</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/help-feedback.html" tabindex="0" data-dl-uid="2" data-dl-original="true" data-dl-translated="true">ヘルプとフィードバック</a></li><li class="chapter-item affix "></li><li class="part-title" data-dl-uid="3" data-dl-original="true" data-dl-translated="true">Part.I - Hello World!</li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/setup.html" tabindex="0" data-dl-uid="4" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="5" data-dl-original="true" data-dl-translated="true">1.</strong>セットアップ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/hello_world.html" tabindex="0" data-dl-uid="6" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="7" data-dl-original="true" data-dl-translated="true">2.</strong>Hello World!</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/toolchain.html" tabindex="0" data-dl-uid="8" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="9" data-dl-original="true" data-dl-translated="true">3.</strong>ツールチェイン</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/bin_and_hex.html" tabindex="0" data-dl-uid="10" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="11" data-dl-original="true" data-dl-translated="true">4.</strong>2進数、16進数</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/registers.html" tabindex="0" data-dl-uid="12" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="13" data-dl-original="true" data-dl-translated="true">5.</strong>レジスター</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/assembly.html" tabindex="0" data-dl-uid="14" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="15" data-dl-original="true" data-dl-translated="true">6.</strong>組立の基本</a></li><li class="chapter-item expanded "><a href="https://eldred.fr/gb-asm-tutorial/part1/memory.html" class="active" tabindex="0" data-dl-uid="16" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="17" data-dl-original="true" data-dl-translated="true">7.</strong>メモリ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/header.html" tabindex="0" data-dl-uid="18" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="19" data-dl-original="true" data-dl-translated="true">8.</strong>ヘッダー</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/operations.html" tabindex="0" data-dl-uid="20" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="21" data-dl-original="true" data-dl-translated="true">9.</strong>オペレーション＆フラッグ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/jumps.html" tabindex="0" data-dl-uid="22" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="23" data-dl-original="true" data-dl-translated="true">10.</strong>ジャンプ</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/tracing.html" tabindex="0" data-dl-uid="24" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="25" data-dl-original="true" data-dl-translated="true">11.</strong>トレース</a></li><li class="chapter-item "><div data-dl-uid="26" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="27" data-dl-original="true" data-dl-translated="true">12.</strong>グラフィックス</div><a class="toggle" tabindex="0"><div data-dl-uid="28" data-dl-original="true" data-dl-translated="true">❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/tiles.html" tabindex="0"><strong aria-hidden="true">12.1.</strong> Tiles</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/palettes.html" tabindex="0"><strong aria-hidden="true">12.2.</strong> Palettes</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/tilemap.html" tabindex="0"><strong aria-hidden="true">12.3.</strong> Tilemap</a></li></ol></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part1/wrapup.html" tabindex="0" data-dl-uid="29" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="30" data-dl-original="true" data-dl-translated="true">13.</strong>まとめ</a></li><li class="chapter-item affix "></li><li class="part-title" data-dl-uid="31" data-dl-original="true" data-dl-translated="true">Part II - 初めてのゲーム</li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/getting-started.html" tabindex="0" data-dl-uid="32" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="33" data-dl-original="true" data-dl-translated="true">14.</strong>はじめに</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/objects.html" tabindex="0" data-dl-uid="34" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="35" data-dl-original="true" data-dl-translated="true">15.</strong>対象物</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/functions.html" tabindex="0" data-dl-uid="36" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="37" data-dl-original="true" data-dl-translated="true">16.</strong>機能一覧</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/input.html" tabindex="0" data-dl-uid="38" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="39" data-dl-original="true" data-dl-translated="true">17.</strong>入力</a></li><li class="chapter-item "><a href="https://eldred.fr/gb-asm-tutorial/part2/wip.html" tabindex="0" data-dl-uid="40" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="41" data-dl-original="true" data-dl-translated="true">18.</strong>進行中の仕事</a></li><li class="chapter-item affix "></li><li class="part-title" data-dl-uid="42" data-dl-original="true" data-dl-translated="true">第Ⅲ部 第2試合</li><li class="chapter-item "><div data-dl-uid="43" data-dl-original="true" data-dl-translated="true"><strong aria-hidden="true" data-dl-uid="44" data-dl-original="true" data-dl-translated="true">19.</strong>To be written...</div></li><li class="spacer"></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/next.html" tabindex="0" data-dl-uid="45" data-dl-original="true" data-dl-translated="true">次に進むべき道</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/resources.html" tabindex="0" data-dl-uid="46" data-dl-original="true" data-dl-translated="true">リソース</a></li><li class="chapter-item affix "><a href="https://eldred.fr/gb-asm-tutorial/thanks.html" tabindex="0" data-dl-uid="47" data-dl-original="true" data-dl-translated="true">感謝</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar" style="top: 0px;">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar" aria-expanded="true">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title" data-dl-uid="48" data-dl-original="true" data-dl-translated="true">GB ASMチュートリアル</h1>
+
+                    <div class="right-buttons">
+                        <a href="https://eldred.fr/gb-asm-tutorial/print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/ISSOtm/gb-asm-tutorial" title="Git repository" aria-label="Git repository" target="_blank">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/ISSOtm/gb-asm-tutorial/edit/master/src/part1/memory.md" title="Suggest an edit" aria-label="Suggest an edit" target="_blank">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="memory" data-dl-uid="49" data-dl-original="true" data-dl-translated="true"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#memory" data-dl-uid="50" data-dl-original="true" data-dl-translated="true">メモリ</a></h1>
+<div class="box tip decorated">
+<div><p data-dl-uid="51" data-dl-original="true" data-dl-translated="true">🎉</p></div>
+<div>
+<p data-dl-uid="52" data-dl-original="true" data-dl-translated="true">おめでとうございます！チュートリアルの一番難しいレッスンが終わりましたね。 基本的なことはわかったので、これからはどんどん具体的なコードを見ていきましょう。</p>
+</div>
+</div>
+<p data-dl-uid="53" data-dl-original="true" data-dl-translated="true">29行目を見ると、<code class="hljs" data-dl-uid="54" data-dl-original="true" data-dl-translated="true">ld a, [de]</code> とあります。 これは、レジスタ<code class="hljs" data-dl-uid="55" data-dl-original="true" data-dl-translated="true">aに</code>値をコピーしています。 この括弧の意味は？ それに答えるには、<em data-dl-uid="56" data-dl-original="true" data-dl-translated="true">メモリについて</em>説明する必要があります。</p>
+<h2 id="whats-a-memory" data-dl-uid="57" data-dl-original="true" data-dl-translated="true"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#whats-a-memory" data-dl-uid="58" data-dl-original="true" data-dl-translated="true">思い出って何？</a></h2>
+<p data-dl-uid="59" data-dl-original="true" data-dl-translated="true">記憶の目的は情報を保存することです。 例えば、紙やホワイトボードに、食料品リストを保存するために文字を書くことができます。 しかし、コンピューターのメモリには何を保存できるのでしょうか？ その答えは<em data-dl-uid="60" data-dl-original="true" data-dl-translated="true">電流です</em><sup class="footnote-reference" data-dl-uid="61" data-dl-original="true" data-dl-translated="true"><a href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#memory_magnetic" data-dl-uid="62" data-dl-original="true" data-dl-translated="true">1</a></sup>。コンピューターのメモリは、電流を保存できる小さなセルでできています。 しかし、2進数の授業で見たように、電流の有無で2進数を符号化することができます！電流の有無は、2進数の符号化に使用されます。</p>
+<p data-dl-uid="63" data-dl-original="true" data-dl-translated="true"><strong data-dl-uid="64" data-dl-original="true" data-dl-translated="true">メモリには数字が記録されて</strong>います。 実はメモリは数字の<em data-dl-uid="65" data-dl-original="true" data-dl-translated="true">長い</em>配列で、セルに格納されています。 各セルを一意に識別するために、<em data-dl-uid="66" data-dl-original="true" data-dl-translated="true">アドレスと</em>呼ばれる数字が与えられています。 通りの番号と同じです！最初のセルのアドレスは0、次にアドレス1、2、...と続きます。 ゲームボーイでは、各セルに<em data-dl-uid="67" data-dl-original="true" data-dl-translated="true">8ビット</em>、つまり1<em data-dl-uid="68" data-dl-original="true" data-dl-translated="true">バイトが</em>格納されています。</p>
+<p data-dl-uid="69" data-dl-original="true" data-dl-translated="true">細胞はいくつあるのでしょうか？</p>
+<h2 id="the-many-types-of-memory" data-dl-uid="70" data-dl-original="true" data-dl-translated="true"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#the-many-types-of-memory" data-dl-uid="71" data-dl-original="true" data-dl-translated="true">さまざまな種類のメモリ</a></h2>
+<p data-dl-uid="72" data-dl-original="true" data-dl-translated="true">ゲームボーイにはいくつかのメモリチップが搭載されていますが、それらを2つに分類することができます。<abbr title="Read-Only Memory" data-dl-uid="73" data-dl-original="true" data-dl-translated="true">ROMは</abbr>単純に書き込みができないメモリ<sup class="footnote-reference" data-dl-uid="77" data-dl-original="true" data-dl-translated="true"><a href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#rom_ro" data-dl-uid="78" data-dl-original="true" data-dl-translated="true">3</a></sup>、RAMは書き込みができるメモリです。</p>
+<p data-dl-uid="79" data-dl-original="true" data-dl-translated="true">そのため、CPUもメモリチップも、住所には1つの番号しか使えない。 街の番号」に例えると、メモリチップはそれぞれ独自の番号を持つ「街」だが、CPUは「街」が何であるかを知らず、「街番号」だけを扱う。 CPUが複数のチップと会話できるように、「<em data-dl-uid="80" data-dl-original="true" data-dl-translated="true">チップセレクタ</em>」という一種の郵便サービスが、CPUの街番号と街番号に変換してくれる役割を担っているのである。</p>
+<p data-dl-uid="81" data-dl-original="true" data-dl-translated="true">例えば、アドレス0〜1999はチップAの0〜1999、2000〜2999はチップBの0〜999、3000〜3999はチップCの0〜999という規約があったとする。 そして、CPUがアドレス2791のバイトを要求すれば、チップセレクタはチップBに対して<em data-dl-uid="82" data-dl-original="true" data-dl-translated="true">自分の</em>アドレス791のバイトを要求し、その返答をCPUに転送することになる。</p>
+<p data-dl-uid="83" data-dl-original="true" data-dl-translated="true">CPUが扱うアドレスとチップのアドレスは直接対応していないので、<em data-dl-uid="84" data-dl-original="true" data-dl-translated="true">論理</em>アドレス（ここではCPUのアドレス）と<em data-dl-uid="85" data-dl-original="true" data-dl-translated="true">物理</em>アドレス（ここではチップのアドレス）で話し、その対応関係を<em data-dl-uid="86" data-dl-original="true" data-dl-translated="true">メモリマップと</em>呼ぶ。 今回はCPUのプログラミングなので<strong data-dl-uid="87" data-dl-original="true" data-dl-translated="true">論理</strong>アドレスのみを扱うが、チップにはそれぞれ特徴があるので、異なるアドレスは異なるメモリチップでバックアップされているかもしれないということを頭に入れておくことが肝要である。</p>
+<p data-dl-uid="88" data-dl-original="true" data-dl-translated="true">複雑に聞こえるかもしれませんので、ここで要約します。</p>
+<ul>
+<li data-dl-uid="89" data-dl-original="true" data-dl-translated="true">メモリは数字を記憶するもので、ゲームボーイでは8ビットずつです。</li>
+<li>Memory is accessed byte by byte, and the cell being accessed is determined by an <em>address</em>, which is just a number.</li>
+<li>The CPU deals with all memory uniformly, but there are several memory chips each with their own characteristics.</li>
+</ul>
+<h3 id="game-boy-memory-map"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#game-boy-memory-map">Game Boy memory map</a></h3>
+<p>Let’s answer the question that introduced this section: how many memory cells are there on the Game Boy?
+Well, now, we can reframe this question as “how many logical addresses are there?” or “how many physical addresses are there in total?”.</p>
+<p>Logical addresses, which again are just numbers, are 16-bit on the Game Boy.
+Therefore, there are 2^16 = 65536 logical addresses, from $0000 to $FFFF.
+How many physical addresses, though?
+Well, here is a memory map <a href="https://gbdev.io/pandocs/Memory_Map.html" target="_blank">courtesy of Pan Docs</a> (though I will simplify it a bit):</p>
+<div class="table-wrapper"><table><thead><tr><th>Start</th><th>End</th><th>Name</th><th>Description</th></tr></thead><tbody>
+<tr><td>$0000</td><td>$7FFF</td><td>ROM</td><td>The game ROM, supplied by the cartridge.</td></tr>
+<tr><td>$8000</td><td>$9FFF</td><td>VRAM</td><td>Video RAM, where graphics are stored and arranged.</td></tr>
+<tr><td>$A000</td><td>$BFFF</td><td>SRAM</td><td>Save RAM, optionally supplied by the cartridge to save data to.</td></tr>
+<tr><td>$C000</td><td>$DFFF</td><td>WRAM</td><td>Work RAM, general-purpose RAM for the game to store things in.</td></tr>
+<tr><td>$FE00</td><td>$FE9F</td><td>OAM</td><td>Object Attribute Memory, where “objects” are stored.</td></tr>
+<tr><td>$FF00</td><td>$FF7F</td><td>I/O</td><td>Neither ROM nor RAM, but this is where you control the console.</td></tr>
+<tr><td>$FF80</td><td>$FFFE</td><td>HRAM</td><td>High RAM, a tiny bit of general-purpose RAM which can be accessed faster.</td></tr>
+<tr><td>$FFFF</td><td>$FFFF</td><td>IE</td><td>A lone I/O byte that’s separated from the rest for some reason.</td></tr>
+</tbody></table>
+</div>
+<p>$8000 + $2000 + $2000 + $2000 + $A0 + $80 + $7F + 1 adds up to $E1A0, or 57760 bytes of memory that can be <em>actually</em> accessed.
+The curious reader will naturally ask, “What about the remaining 7776 bytes? What happens when accessing them?”; the answer is: “It depends, it’s complicated; avoid accessing them”.</p>
+<h2 id="labels"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#labels">Labels</a></h2>
+<p>Okay, memory addresses are nice, but you can’t possibly expect me to keep track of all these addresses manually, right??
+Well, fear not, for we have labels!</p>
+<p>Labels are <a href="https://rgbds.gbdev.io/docs/v0.5.1/rgbasm.5#SYMBOLS" target="_blank">symbols</a> which basically allow attaching a name to a byte of memory.
+A label is declared like at line 9 (<code class="hljs">EntryPoint:</code>): at the beginning of the line, write the label’s name, followed by a colon, and it will refer to the byte right after itself.
+So, for example, <code class="hljs">EntryPoint</code> refers to the <code class="hljs">ld a, 0</code> right below it (more accurately, the first byte of that instruction, but we will get there when we get there).</p>
+<div class="box tip">
+<p>If you peek inside <code class="hljs">hardware.inc</code>, you will see that for example <code class="hljs">rNR52</code> is not defined as a label.
+That’s because they are <em>constants</em>, which we will touch on later; since they can be used mostly like labels, we will conflate the two for now.</p>
+</div>
+<p>Writing out a label’s name is equivalent to writing the address of the byte it’s referencing (with a few exceptions we will see in Part Ⅱ).
+For example, consider the <code class="hljs">ld de, Tiles</code> at line 25.
+<code class="hljs">Tiles</code> (line 64) is referring to the first byte of the tile data; if we assume that the tile data ends up being stored starting at $0193, then <code class="hljs">ld de, Tiles</code> is equivalent to <code class="hljs">ld de, $0193</code>!</p>
+<h2 id="whats-with-the-brackets"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#whats-with-the-brackets">What’s with the brackets?</a></h2>
+<p>Right, we came into this because we wanted to know what the brackets in <code class="hljs">ld a, [de]</code> mean.
+Well, they can basically be read as “at address…”.
+For example, <code class="hljs">ld a, b</code> can be read as “copy into <code class="hljs">a</code> the value stored in <code class="hljs">b</code>”; <code class="hljs">ld a, [$5414]</code> would be read as “copy into <code class="hljs">a</code> the value stored at address $5414”, and <code class="hljs">ld a, [de]</code> would be read as “copy into <code class="hljs">a</code> the value stored at address <code class="hljs">de</code>”.
+Wait, what does that mean?
+Well, if <code class="hljs">de</code> contains the value $5414, then <code class="hljs">ld a, [de]</code> will do the same thing as <code class="hljs">ld a, [$5414]</code>.</p>
+<div class="box tip">
+<p>If you’re familiar with C, these brackets are basically how the dereference operator is implemented.</p>
+</div>
+<h3 id="hli"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#hli"><code>hli</code></a></h3>
+<p>An astute reader will have noticed the <code class="hljs">ld [hli], a</code> just below the <code class="hljs">ld a, [de]</code> we have just studied.
+<code class="hljs">[de]</code> makes sense because it’s one of the register pairs we saw a couple lessons ago, but <code class="hljs">[hli]</code>?
+It’s actually a special notation, which can also be written as <code class="hljs">[hl+]</code>.
+It functions as <code class="hljs">[hl]</code>, but <code class="hljs">hl</code> is <em>incremented</em> just after memory is accessed.
+<code class="hljs">[hld]</code>/<code class="hljs">[hl-]</code> is the mirror of this one, <em>decrementing</em> <code class="hljs">hl</code> instead of incrementing it.</p>
+<h2 id="an-example"><a class="header" href="https://eldred.fr/gb-asm-tutorial/part1/memory.html#an-example">An example</a></h2>
+<p>So, if we look at the first two instructions of <code class="hljs">CopyTiles</code>:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-rgbasm linenos start=29 hljs" style="counter-reset: lineno 28;"><span class="line">    <span class="hljs-keyword">ld</span> <span class="hljs-variable">a</span><span class="hljs-punctuation">,</span> <span class="hljs-punctuation">[</span><span class="hljs-variable">de</span><span class="hljs-punctuation">]</span>
+</span><span class="line">    <span class="hljs-keyword">ld</span> <span class="hljs-punctuation">[</span><span class="hljs-variable">hli</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <span class="hljs-variable">a</span>
+</span></code></pre>
+<p>…we can see that we’re copying the byte in memory <em>pointed to</em> by <code class="hljs">de</code> (that is, whose address is contained in <code class="hljs">de</code>) into the byte pointed to by <code class="hljs">hl</code>.
+Here, <code class="hljs">a</code> serves as temporary storage, since the CPU is unable to perform <code class="hljs">ld [hl], [de]</code> directly.</p>
+<p>While we’re at this, let’s examine the rest of <code class="hljs">.copyTiles</code> in the following lessons!</p>
+<hr>
+<div class="footnote-definition" id="memory_magnetic"><sup class="footnote-definition-label">1</sup>
+<p>Actually, this depends a lot on the type of memory.
+A lot of memory nowadays uses magnetic storage, but to keep the explanation simple, and to parallel the explanation of binary given earlier, let’s assume that current is being used.</p>
+</div>
+<div class="footnote-definition" id="rom_ram_and"><sup class="footnote-definition-label">2</sup>
+<p>There are other types of memory, such as flash memory or EEPROM, but only Flash has been used on the Game Boy, and for only a handful of games; so we can mostly forget about them.</p>
+</div>
+<div class="footnote-definition" id="rom_ro"><sup class="footnote-definition-label">3</sup>
+<p>No, really!
+Mask ROM is created by literally punching holes into a layer of silicon using acid, and e.g. the console’s boot ROM is made of hard-wired transitors within the CPU die.
+Good luck writing to that!
+<br>
+“ROM” is sometimes (mis)used to refer to “persistent memory” chips, such as flash memory, whose write functionality was disabled.
+Most bootleg / “repro” Game Boy cartridges you can find nowadays actually contain flash; this is why you can reflash them using specialized hardware, but original cartridges cannot be.</p>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="https://eldred.fr/gb-asm-tutorial/part1/assembly.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="https://eldred.fr/gb-asm-tutorial/part1/header.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="https://eldred.fr/gb-asm-tutorial/part1/assembly.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="https://eldred.fr/gb-asm-tutorial/part1/header.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="./mem_files/elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./mem_files/mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./mem_files/searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="./mem_files/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./mem_files/highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./mem_files/book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="./mem_files/linenos.js"></script>
+
+
+    
+
+<img id="sddsExtensionInfoImg" style="display: none; position: absolute; top: 0px; left: 0px; width: 32px; height: 32px; z-index: 2147483647;"><img id="sddsExtensionArrowImg" style="display: none; position: absolute; top: 0px; left: 0px; width: 32px; height: 32px; z-index: 2147483647;"></body></html>
